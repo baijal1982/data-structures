@@ -2,28 +2,10 @@ use std::collections::HashMap;
 
 pub fn num_identical_pairs(nums: Vec<i32>) -> i32 {
  
-
-    if nums.len() < 2   {
-        return 0;
-    }
-
-    
-    
-    let mut map:HashMap<i32,Vec<usize>> = HashMap::new();
-     let mut  count:i32 =0;
-    for index in 0..nums.len()  {
-         if map.contains_key(&nums[index])  {
-               let mut list =  map.get(&nums[index]).expect("").to_vec();
-               list.push(index);
-              map.insert(nums[index], list);
-              count = count + map.get(&nums[index]).expect("").len() as i32 -1;
-         }
-         else {
-             map.insert(nums[index],vec![index]);
-         }
-
-    }
-    count
+      nums.iter().fold(HashMap::new(), |mut acc, k| {
+            *acc.entry(k).or_insert(0) += 1;
+            acc
+        }).values().fold(0, |acc, n| acc + n * (n-1) / 2)
 }
 
 #[cfg(test)]
