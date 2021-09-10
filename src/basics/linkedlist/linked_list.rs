@@ -58,6 +58,20 @@ impl Linked_List  {
           }
     }
 
+    // the existing implemenation of drop is bad. Where tail recursion is not possible as the box ref needs
+    // dropped first .
+    // the disadantage of this approach is a long stack . 
+    // The below implemnetation acheives custom drop in a optmised way in a while loop 
+    impl Drop for Linked_List  {
+        fn drop(&mut self) {
+           let mut curr_node = std::mem::replace(&mut self.head, List::Empty);
+
+           while let List::More(mut node) = curr_node   {
+               curr_node =  std::mem::replace(&mut node.next, List::Empty);
+           }
+    }
+    }
+
 #[cfg(test)]
 mod tests  {
 
