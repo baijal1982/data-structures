@@ -1,3 +1,5 @@
+// basic implementation of linked list 
+
 pub struct Linked_List {
     head: List,
 }
