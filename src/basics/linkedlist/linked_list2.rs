@@ -1,63 +1,36 @@
 
 
-// this implementation provids iterator implemnentation 
-// 3 types of implementation 
-// 1. as T into_interator() 
-//2 . as &T   as iter()
-// 3 as &mut T  as iter_mut()
+// this implementation provids iterator implemnentation for into_iterator
 
-/*
-pub struct Linked_List<'a,T> {
-    head:List<'a,T>
+
+
+
+pub struct Linked_List<T> {
+    head:List<T>
 }
 
-type List<'a,T>  = Option<Box<Node<T>>>; 
-struct Node<'a,T>  {
+type List<T>  = Option<Box<Node<T>>>; 
+struct Node<T>  {
 
     elem:T,
-    next: List<'a,T>
-}
-
-pub struct Into_Iter<'a,T>(Linked_List<'a,T>);
-
-
-pub struct Iter<'a,T>   {
-    next: List<'a,T>
+    next: List<T>
 }
 
 
-impl<'a,T> Iterator  for  Iter<'a,T>  {
-    type Item = &'a T;
-
-    fn next(&mut self) -> Option<Self::Item> {
-       
-        self.next.map(|node| &node.elem)
-    }
-} 
-
-//impl<T>  Iterator  for Into_Iter<T> {
-  ///  type Item = T;
-
-  //  fn next(&mut self) -> Option<Self::Item> {
-   //     self.0.pop()
- //   }
-//}
-
+pub struct Into_Iter<T>(Linked_List<T>);
+ 
 impl<T> Linked_List<T>  {
 
     pub fn new() -> Linked_List<T>  {
-     Linked_List {
+        Linked_List {
             head: List::None
         }
     }
 
-    pub fn into_iter(self) -> Into_Iter<T> {
+
+    pub fn into_iter(self)  -> Into_Iter<T>   {
         Into_Iter(self)
     }
-
-   // pub fn  iter(self)  ->  Iter<T>   {
-  //      Iter { next: self.head }
-  //  }
 
     pub fn push(&mut self, elem:T)   {
           
@@ -93,6 +66,15 @@ impl<T> Linked_List<T>  {
         })
     }
                
+    }
+
+
+    impl<T> Iterator  for Into_Iter<T>  {
+        type Item=T;
+
+        fn next(&mut self) -> Option<Self::Item> {
+        self.0.pop()
+    }
     }
 
     // the existing implemenation of drop is bad. Where tail recursion is not possible as the box ref needs
@@ -137,25 +119,6 @@ pub fn test_linked_list() {
     
     }
 
-    #[test]
-    pub fn test_iteration() {
-
-        let mut list =  Linked_List ::new();
-        list.push(1);
-        list.push(2);
-        list.push(3);
-        list.push(4);
-   
-        
-       let mut iter = list.into_iter();
-       assert_eq!(iter.next(),Some(4));
-       assert_eq!(iter.next(),Some(3));
-
-       
-       }
-   
-
-
     #[test] 
 pub fn test_linked_Strings() {
 
@@ -171,8 +134,19 @@ pub fn test_linked_Strings() {
     
     }
 
+    #[test]
+    pub fn test_iterator()   {
+        let mut list =  Linked_List ::new();
+        list.push(1);list.push(2);list.push(3);
+
+        let mut iter  =  list.into_iter();
+
+        assert_eq!(Some(3),iter.next());
+        assert_eq!(Some(2),iter.next());
+        assert_eq!(Some(1),iter.next());
+        assert_eq!(None,iter.next());
+    }
+
 
 }
 
-
-*/
