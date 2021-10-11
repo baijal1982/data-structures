@@ -1,4 +1,6 @@
-// this implementation provids iterator implemnentation for into_iterator
+use std::ops::{Deref, DerefMut};
+
+// this implementation provids mutable iterator implemnentation for iterator
 
 pub struct Linked_List<T> {
     head: List<T>,
@@ -10,6 +12,21 @@ struct Node<T> {
     next: List<T>,
 }
 
+struct Iter<'a, T> {
+    next: Option<&'a mut Node<T>>,
+}
+
+impl<'a, T> Iterator for Iter<'a, T> {
+    type Item = &'a mut T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.next.take().map(|node| {
+            self.next = node.next.as_deref_mut();
+            &mut node.elem
+        })
+    }
+}
+
 pub struct Into_Iter<T>(Linked_List<T>);
 
 impl<T> Linked_List<T> {
@@ -19,6 +36,12 @@ impl<T> Linked_List<T> {
 
     pub fn into_iter(self) -> Into_Iter<T> {
         Into_Iter(self)
+    }
+
+    pub fn iter<'a>(&'a mut self) -> Iter<'a, T> {
+        Iter {
+            next: self.head.as_mut().map(|node| node.deref_mut()),
+        }
     }
 
     pub fn push(&mut self, elem: T) {
@@ -63,7 +86,7 @@ impl<T> Drop for Linked_List<T> {
         let mut curr_node = self.head.take();
 
         while let List::Some(mut node) = curr_node {
-            curr_node = std::mem::replace(&mut node.next, List::None);
+            curr_node = node.next.take();
         }
     }
 }
@@ -107,7 +130,7 @@ mod tests {
     }
 
     #[test]
-    pub fn test_iterator() {
+    pub fn test_into_iter() {
         let mut list = Linked_List::new();
         list.push(1);
         list.push(2);
@@ -119,5 +142,35 @@ mod tests {
         assert_eq!(Some(2), iter.next());
         assert_eq!(Some(1), iter.next());
         assert_eq!(None, iter.next());
+    }
+
+    #[test]
+    pub fn test_iter() {
+        let mut list = Linked_List::new();
+        list.push(1);
+        list.push(2);
+        list.push(3);
+
+        let mut iter = list.iter();
+
+        assert_eq!(Some(&mut 3), iter.next());
+        assert_eq!(Some(&mut 2), iter.next());
+        assert_eq!(Some(&mut 1), iter.next());
+        assert_eq!(None, iter.next());
+    }
+
+    #[test]
+    pub fn test_mut_iter() {
+        let mut list = Linked_List::new();
+        list.push(1);
+        list.push(2);
+        list.push(3);
+        let data = list.iter().next();
+        assert_eq!(Some(&mut 3), data);
+        data.map(|x| *x += 1);
+
+        let data1 = list.iter().next();
+
+        assert_eq!(Some(&mut 4), data1);
     }
 }
