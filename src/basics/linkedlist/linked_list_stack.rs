@@ -1,6 +1,6 @@
 use std::ops::{Deref, DerefMut};
 
-// this implementation provids mutable iterator implemnentation for iterator
+// this implementation provids implementation for Stack using linked list
 
 pub struct Linked_List<T> {
     head: List<T>,
