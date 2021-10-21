@@ -1,6 +1,6 @@
 use std::{borrow::Borrow, cell::RefCell, rc::Rc};
 
-// this implementation provids mutable iterator implemnentation for iterator
+// this implementation provids implementation for Queue using linked list
 
 pub struct Linked_List<T> {
     head: List<T>,
