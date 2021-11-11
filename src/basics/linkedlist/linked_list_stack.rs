@@ -12,7 +12,7 @@ struct Node<T> {
     next: List<T>,
 }
 
-struct Iter<'a, T> {
+pub struct Iter<'a, T> {
     next: Option<&'a mut Node<T>>,
 }
 

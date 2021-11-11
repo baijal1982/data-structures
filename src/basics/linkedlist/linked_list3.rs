@@ -7,12 +7,12 @@ pub struct Linked_List<T> {
 }
 
 type List<T> = Option<Box<Node<T>>>;
-struct Node<T> {
+pub struct Node<T> {
     elem: T,
     next: List<T>,
 }
 
-struct Iter<'a, T> {
+pub struct Iter<'a, T> {
     next: Option<&'a Node<T>>,
 }
 

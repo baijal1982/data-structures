@@ -9,7 +9,7 @@ pub enum List {
     More(Box<Node>),
 }
 
-struct Node {
+pub struct Node {
     elem: u32,
     next: List,
 }
