@@ -6,6 +6,7 @@ use std::time::Instant;
 
 
 use data_structures::sorting::merge_sort;
+use data_structures::sorting::heap_sort::Heap;
 
 fn main() {
    // let mut arr = [0i64; 10000000];
@@ -16,7 +17,9 @@ fn main() {
        arr.push(rng.gen_range(0, 100));
     }
     let before = Instant::now();
- merge_sort::sort(&mut arr);
+ //merge_sort::sort(&mut arr);
+   let mut heap = Heap::new(&mut arr);
+ heap.sort();
   println!("Elapsed time: {:.1?} in my algo", before.elapsed());
  
     
