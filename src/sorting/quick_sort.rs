@@ -1,0 +1,60 @@
+pub fn quick_sort<T: Ord>(arr: &mut [T]) {
+    let len = arr.len();
+    _quick_sort(arr, 0, (len - 1) as isize);
+}
+
+fn _quick_sort<T: Ord>(arr: &mut [T], low: isize, high: isize) {
+    if low < high {
+        let p = partition(arr, low, high);
+        _quick_sort(arr, low, p - 1);
+        _quick_sort(arr, p + 1, high);
+    }
+}
+
+fn partition<T: Ord>(arr: &mut [T], low: isize, high: isize) -> isize {
+    let pivot = high as usize;
+    let mut store_index = low - 1;
+    let mut last_index = high;
+
+    loop {
+        store_index += 1;
+        while arr[store_index as usize] < arr[pivot] {
+            store_index += 1;
+        }
+        last_index -= 1;
+        while last_index >= 0 && arr[last_index as usize] > arr[pivot] {
+            last_index -= 1;
+        }
+        if store_index >= last_index {
+            break;
+        } else {
+            arr.swap(store_index as usize, last_index as usize);
+        }
+    }
+    arr.swap(store_index as usize, pivot as usize);
+    store_index
+}
+
+#[cfg(test)]
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn test_partition()    {
+        let mut data= vec![2,8,7,1,3,5,6,4];
+       partition(&mut data, 0, 7);
+       
+    assert_eq!(data,vec![2, 3, 1, 4, 8, 5, 6, 7]);
+    }
+
+   
+
+    #[test]
+    fn test_sort()    {
+        let mut data= vec![2,8,7,1,3,5,6,4];
+       quick_sort(&mut data);
+       
+    assert_eq!(data,vec![1,2,3,4,5,6,7,8]);
+    }
+}
