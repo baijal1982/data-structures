@@ -7,12 +7,13 @@ use std::time::Instant;
 use data_structures::sorting::heap_sort::Heap;
 use data_structures::sorting::merge_sort;
 use data_structures::sorting::quick_sort;
+use data_structures::sorting::selection_sort;
 
 fn main() {
     // let mut arr = [0i64; 10000000];
     let mut arr = Vec::new();
     let mut rng = thread_rng();
-    for i in 0..10000000 {
+    for i in 0..10000 {
         arr.push(rng.gen_range(0, 100));
     }
     // merge sort
@@ -32,5 +33,15 @@ fn main() {
     quick_sort::quick_sort(&mut arr);
 
     println!("Elapsed time: {:.1?} in quick sort", before.elapsed());
+
+    // selection  sort
+    
+    let before = Instant::now();
+    let size = arr.len();
+   selection_sort::sort(&mut arr,size);
+
+    println!("Elapsed time: {:.1?} in selection sort", before.elapsed());
+
+
    // println!("array now is {:?}",arr);
 }
