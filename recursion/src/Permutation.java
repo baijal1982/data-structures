@@ -19,6 +19,6 @@ public class Permutation  {
 
 
     public static void main(String arg[])   {
-        permutate("", "ABCD");
+        permutate("", "listen");
     }
 }

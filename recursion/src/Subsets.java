@@ -17,6 +17,6 @@ public class Subsets {
 
     public static void main(String arg[])   {
 
-           subsets("", "ABCDEF");
+           subsets("", "ABCD");
     }
 }
